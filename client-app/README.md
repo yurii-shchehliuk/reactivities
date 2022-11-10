@@ -49,3 +49,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 • https://github.com/jasongin/nvs
 • npx create-react-app client-app --use-npm --template typescript
 • Atomic design
+• Axios, Semantic UI React, MoboX
+
+### Installs
+npm install semantic-ui-react
