@@ -53,3 +53,4 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ### Installs
 npm install semantic-ui-react
+npm install mobx mobx-react-lite
