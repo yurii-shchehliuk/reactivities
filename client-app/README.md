@@ -47,10 +47,12 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Project setup
 • Atomic design
-• Axios, Semantic UI React, MoboX
+• Axios, Semantic UI React, MoboX, ReactRouter
 • https://github.com/jasongin/nvs
 • npx create-react-app client-app --use-npm --template typescript
 
 ### Installs
 npm install semantic-ui-react
 npm install mobx mobx-react-lite
+npm install mobx mobx-react-lite
+npm install react-router-dom@5.3.0 @types/react-router-dom@5.3.2
