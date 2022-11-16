@@ -57,3 +57,4 @@ npm install mobx mobx-react-lite
 npm install mobx mobx-react-lite
 npm install react-router-dom@5.3.0 @types/react-router-dom@5.3.2
 npm i react-calendar @types/react-calendar
+npm i react-toastify

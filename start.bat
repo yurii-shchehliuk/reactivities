@@ -1,3 +1,5 @@
 cd deploy
-START start-server.bat
-START start-client.bat
+START /b start-server.bat
+START /b start-client.bat
+cd ../client-app
+code .
