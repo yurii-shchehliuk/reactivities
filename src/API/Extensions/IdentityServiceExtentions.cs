@@ -1,5 +1,4 @@
 ﻿using API.Core;
-using API.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -29,11 +28,14 @@ namespace API.Extensions
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
                     };
+
                 });
 
-            services.AddScoped<TokenService>();
+            services.AddAuthorization();
         }
     }
 }
