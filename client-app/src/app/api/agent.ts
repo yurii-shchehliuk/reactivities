@@ -1,7 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'react-toastify';
 import { history } from '../..';
-import { IActivity } from '../models/activity';
+import { ActivityFormValues, IActivity } from '../models/activity';
+import { Photo, Profile, UserActivity } from '../models/profile';
+import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 
 const sleep = (delay: number) => {
@@ -11,6 +13,12 @@ const sleep = (delay: number) => {
 }
 
 axios.defaults.baseURL = 'http://localhost:5000/api'
+
+axios.interceptors.request.use((config : any) => {
+    const token = store.commonStore.token;
+    if (token) config.headers.Authorization = `Bearer ${token}`
+    return config;
+})
 
 axios.interceptors.response.use(async response => {
     await sleep(800);
@@ -53,23 +61,60 @@ axios.interceptors.response.use(async response => {
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
-const request = {
+const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
     put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-    delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
+    del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 }
 
 const Activities = {
-    list: () => request.get<IActivity[]>('/activities'),
-    details: (id: string) => request.get<IActivity>(`/activities/${id}`),
-    create: (activity: IActivity) => request.post<void>('/activities', activity),
-    update: (activity: IActivity) => request.put<void>(`/activities/${activity.id}`, activity),
-    delete: (id: string) => request.delete<void>(`/activities/${id}`),
+    list: (params: URLSearchParams) => axios.get<IActivity[]>('/activities', { params })
+        .then(responseBody),
+    details: (id: string) => requests.get<IActivity>(`/activities/${id}`),
+    create: (activity: ActivityFormValues) => requests.post<void>('/activities', activity),
+    update: (activity: ActivityFormValues) => requests.put<void>(`/activities/${activity.id}`, activity),
+    delete: (id: string) => requests.del<void>(`/activities/${id}`),
+    attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {})
+}
+
+
+const Account = {
+    current: () => requests.get<User>('/account'),
+    login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register', user),
+    fbLogin: (accessToken: string) => requests
+        .post<User>(`/account/fbLogin?accessToken=${accessToken}`, {}),
+    refreshToken: () => requests.post<User>('/account/refreshToken', {}),
+    verifyEmail: (token: string, email: string) =>
+        requests.post<void>(`/account/verifyEmail?token=${token}&email=${email}`, {}),
+    resendEmailConfirm: (email: string) =>
+        requests.get(`/account/resendEmailConfirmationLink?email=${email}`)
+}
+
+const Profiles = {
+    get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+    uploadPhoto: (file: Blob) => {
+        let formData = new FormData();
+        formData.append('File', file);
+        return axios.post<Photo>('photos', formData, {
+            headers: { 'Content-type': 'multipart/form-data' }
+        })
+    },
+    setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
+    deletePhoto: (id: string) => requests.del(`/photos/${id}`),
+    updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
+    updateFollowing: (username: string) => requests.post(`/follow/${username}`, {}),
+    listFollowings: (username: string, predicate: string) =>
+        requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
+    listActivities: (username: string, predicate: string) =>
+        requests.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`)
 }
 
 const agent = {
-    Activities
+    Activities,
+    Account,
+    Profiles
 }
 
 export default agent;
