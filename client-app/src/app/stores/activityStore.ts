@@ -16,23 +16,28 @@ export default class ActivityStore {
 
     get activitiesByDate() {
         return Array.from(this.activityRegistry.values()).sort((a, b) =>
-            (a.date!.getTime()) - (b.date!.getTime()));
+            a.date!.getTime() - b.date!.getTime());
     }
 
     get groupedActivities() {
         return Object.entries(
             this.activitiesByDate.reduce((activities, activity) => {
                 const date = format(activity.date!, 'dd MMM yyyy');
-                activities[date] = activities[date] ? [...activities[date], activity] : [activity]
+                activities[date] = activities[date] ? [...activities[date], activity] : [activity];
                 return activities;
-            }, {} as { [key: string]: IActivity[] })
+            }, {} as {[key: string]: IActivity[]})
         )
+    }
+    get axiosParams() {
+        const params = new URLSearchParams();
+       
+        return params;
     }
 
     loadActivities = async () => {
         this.loadingInitial = true;
         try {
-            const activitiesRes = await agent.Activities.list();
+            const activitiesRes = await agent.Activities.list(this.axiosParams);
             activitiesRes.forEach((item) => {
                 this.setActivity(item);
             });
