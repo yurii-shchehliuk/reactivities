@@ -1,12 +1,11 @@
 ﻿using Application.Activities;
 using Domain.Entities;
-using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
 
@@ -14,7 +13,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetActivity(Guid id)
         {
             var result = await Mediator.Send(new Details.Query { Id = id });
-            
+
             return HandleResult(result);
         }
 

@@ -39,7 +39,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+# Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
@@ -47,7 +47,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Project setup
 • Atomic design
-• Axios, Semantic UI React, MoboX, ReactRouter
+• Axios, Semantic UI React, MoboX, ReactRouter, Formik
 • https://github.com/jasongin/nvs
 • npx create-react-app client-app --use-npm --template typescript
 
@@ -58,3 +58,8 @@ npm install mobx mobx-react-lite
 npm install react-router-dom@5.3.0 @types/react-router-dom@5.3.2
 npm i react-calendar @types/react-calendar
 npm i react-toastify
+npm i formik
+npm i yup @types/yup
+npm i react-datepicker @types/react-datepicker
+npm ls date-fns
+npm i date-fns@2.39.3
